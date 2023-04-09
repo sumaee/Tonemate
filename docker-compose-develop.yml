@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+  spring_dev:
+    build: ./back-end
+    container_name: springDev
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - BUCKET_NAME=${BUCKET_NAME}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - KAKAO_SECRET=${KAKAO_SECRET}
+      - KAKAO_ID=${KAKAO_ID}
+      - GOOGLE_SECRET=${GOOGLE_SECRET}
+      - GOOGLE_ID=${GOOGLE_ID}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - KAKAO_REDIRECT_URI=${KAKAO_REDIRECT_URI}
+      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI}
+      - FLASK_DOMAIN=${FLASK_DOMAIN}
+    volumes:
+      - AI_DATA:/DATA
+    command: java -jar /tonemate/build/libs/tonemate-0.0.1-SNAPSHOT.jar
+    networks:
+      - tonemate_dev
+
+  flask_dev:
+    container_name: flaskDev
+    build: ./AI
+    environment:
+      - FLASK_FEATURES=${FLASK_FEATURES}
+      - FLASK_TARGET_EPOCH=${FLASK_TARGET_EPOCH}
+      - FLASK_MODEL_VERSION=${FLASK_MODEL_VERSION}
+    volumes:
+      - AI_DATA:/DATA
+    command: python app.py
+    networks:
+      - tonemate_dev
+    
+  front_dev:
+    container_name: frontDev
+    build:
+      context: ./front-end/tonemate
+      dockerfile: docker/production/Dockerfile # dev 버전이라도 production해야함, dev는 local사용
+    networks:
+      - tonemate_dev
+volumes:
+  AI_DATA:
+    external: true
+networks:
+  tonemate_dev:
+    driver: bridge
+    external: true

@@ -1,0 +1,75 @@
+version: '3.3'
+services:
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts
+    ports : 
+      - '8100:8080'
+    user: root
+    volumes:
+      - ./jenkins/home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+      - AI_DATA:/var/DATA
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      - TZ = Asia/Seoul
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./mysql/mysql-init-files/:/docker-entrypoint-initdb.d/
+      - ./mysql/res/data/:/var/lib/mysql
+      - ./mysql/config/my.cnf:/etc/my.cnf
+    ports:
+      - 3305:3306
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.5-alpine
+    ports:
+      - 80:80
+      - 8080:8080
+      - 443:443
+    volumes:
+      - ./data/nginx/nginx-dev.conf:/etc/nginx/nginx-dev.conf
+      - ./data/nginx/nginx-prod.conf:/etc/nginx/nginx-prod.conf
+      - ./data/nginx/nginx-prod.conf:/etc/nginx/nginx.conf # 기본
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - tonemate_dev
+      - tonemate_prod
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  AI_DATA:
+    external: true
+networks:
+  tonemate_dev:
+    external: true
+  tonemate_prod:
+    external: true

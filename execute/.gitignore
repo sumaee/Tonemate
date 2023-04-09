@@ -1,0 +1,4 @@
+jenkins/*
+mysql/res/data/*
+mysql/mysql-init-files/*
+data/certbot/*
