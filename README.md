@@ -65,6 +65,7 @@
 # ERD
 <details>
 <summary>펼쳐보기</summary>
+    
 ![ERD](pic/Untitled0.png)
 </details>
 
