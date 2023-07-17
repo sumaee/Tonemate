@@ -65,7 +65,7 @@
 # ERD
 <details>
 <summary>펼쳐보기</summary>
-![ERD](pic/Untitled.png)
+![ERD](pic/Untitled0.png)
 </details>
 
 # 모델 구조
@@ -73,16 +73,16 @@
 <details>
   <summary>v1</summary>
 
-  ![v1_summary](pic/Untitled 1.png)
-  ![v1](pic/Untitled 2.png)
+  ![v1_summary](pic/Untitled1.png)
+  ![v1](pic/Untitled2.png)
 </details>
     
 
 <details>
   <summary>v2</summary>
 
-  ![v2_summary](pic/Untitled 3.png)
-  ![v2](pic/Untitled 4.png)
+  ![v2_summary](pic/Untitled3.png)
+  ![v2](pic/Untitled4.png)
 </details>
 
     
@@ -101,11 +101,11 @@
 
 - v1
 
-![v1_시각화](pic/Untitled 5.png)
+![v1_시각화](pic/Untitled5.png)
 
 - v2
 
-![v2_시각화](pic/Untitled 6.png)
+![v2_시각화](pic/Untitled6.png)
 
 # 기능
 <details>
@@ -201,7 +201,7 @@
 
 # 서비스 아키텍처
 
-![아키텍쳐](pic/Untitled 7.png)
+![아키텍쳐](pic/Untitled7.png)
 
 # 데이터셋
 
